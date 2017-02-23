@@ -261,3 +261,18 @@ def clipPitch(track, clip, coarse = None, fine = None):
     if fine != None:
         clip.pitch_fine = fine
     return (clip.pitch_coarse, clip.pitch_fine)
+
+#non-liveOSC functionality
+def getCurrentTimeInBeats(beatString = None):
+    """Returns the current song time in beats"""
+    #Don't have a set func yet
+    # song = getSong()
+    # if beatString is not None:
+    #     song.current_song_time = time
+    return getSong().get_current_beats_song_time()
+
+def getSongLength():
+    """Returns the current song lenth in """
+    return getSong().song_length
+
+

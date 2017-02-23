@@ -133,7 +133,8 @@ class LiveOSCCallbacks:
         self.callbackManager.add("/live/selection", self.selectionCB)
 
         #non-liveOSC callbacks 
-        self.callbackManager.add("/live/beats", self.selectionCB)
+        self.callbackManager.add("/live/beats", self.beatsCB)
+        self.callbackManager.add("/live/song/length", self.songLengthCB)
         
 
 
@@ -1228,4 +1229,36 @@ class LiveOSCCallbacks:
     def quantizationCB(self, msg, source):
         quant = msg[2]
         LiveUtils.getSong().clip_trigger_quantization = quant
+
+
+    ## non-LiveOSC
+    def beatsCB(self, msg, source):
+        """Called when a /live/beats message is received.
+
+        Messages:
+        /live/beats                Request current song time in beats, replies with /live/beats (string beats)
+        /live/beats (string beats) We don't hava set functionality yet
+        """
+        # if len(msg) == 2 or (len(msg) == 3 and msg[2] == "query"):
+        self.oscEndpoint.send("/live/beats", str(LiveUtils.getCurrentTimeInBeats()))
+
+        # elif len(msg) == 3:
+        #     time = msg[2]
+        #     LiveUtils.currentTimeInBeats(time)
+
+     def songLengthCB(self, msg, source):
+        """Called when a /live/song/length message is received.
+
+        Messages:
+        /live/song/length               Request current song time in beats, replies with /live/song/length (float length)
+        """
+        # if len(msg) == 2 or (len(msg) == 3 and msg[2] == "query"):
+        # self.oscEndpoint.send("/live/song/length", float(LiveUtils.getSongLength()))
+        self.oscEndpoint.send("/live/song/length", str(LiveUtils.getCurrentTimeInBeats()))
+
+        # elif len(msg) == 3:
+        #     time = msg[2]
+        #     LiveUtils.currentTimeInBeats(time)
+
+        
 
