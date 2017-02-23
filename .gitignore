@@ -27,3 +27,7 @@
 *.exe
 *.out
 *.app
+
+#Compiled python sricripts
+*.pyc
+
