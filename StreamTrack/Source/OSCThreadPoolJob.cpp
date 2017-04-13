@@ -13,9 +13,10 @@
 
 FFTLight *OSCThreadPoolJob::pFft = new FFTLight();
 
-OSCThreadPoolJob::OSCThreadPoolJob(int maxNumChannels, int maxBlockSize): ThreadPoolJob("OSC ThreadPool JOB") {
+OSCThreadPoolJob::OSCThreadPoolJob(int maxNumChannels, int maxBlockSize, OSCSender* o): ThreadPoolJob("OSC ThreadPool JOB") {
     this->maxNumChannels = maxNumChannels;
     this->maxBlockSize = maxBlockSize;
+    this->oscSender = o;
     ppAudio = new float*[maxNumChannels];
 //    ppSpectrum = new float*[maxNumChannels];
 //    ppAudio8bit = new uint8*[maxNumChannels];
@@ -42,9 +43,6 @@ void OSCThreadPoolJob::init(AudioSampleBuffer &data, int numChannels, int blockS
                 }
             }
         }
-//        for (int i=0; i<numChannels; i++) {
-//            audio.insert(data.getWritePointer(i)+i*blockSize, blockSize*sizeof(float), blockSize*i);
-//        }
     }
 }
 
@@ -78,9 +76,6 @@ OSCThreadPoolJob::JobStatus OSCThreadPoolJob::runJob()  {
             maxBlockSize = blockSize;
         }
         
-        
-        
-        
         for (int i=0; i<numChannels; i++) {
             
             //bit-crush
@@ -103,8 +98,8 @@ OSCThreadPoolJob::JobStatus OSCThreadPoolJob::runJob()  {
             spectrum.insert(pFft->getSpectrum(ppAudio[i]), pFft->getFFTLength()*sizeof(float), pFft->getFFTLength()*i);
         }
         
-        StreamTrackAudioProcessor::oscSender->send("/live/track/"+trackNum+"/audio", numChannels, blockSize, audio);
-        StreamTrackAudioProcessor::oscSender->send("/live/track/"+trackNum+"/spectrum", numChannels, pFft->getFFTLength(), spectrum);
+        oscSender->send("/live/track/"+trackNum+"/audio", numChannels, blockSize, audio);
+        oscSender->send("/live/track/"+trackNum+"/spectrum", numChannels, pFft->getFFTLength(), spectrum);
         resetMemoryBlocks();
     }
     

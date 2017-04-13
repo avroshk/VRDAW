@@ -18,6 +18,8 @@
 //==============================================================================
 /**
 */
+//class OSCThreadPoolJob;
+
 class StreamTrackAudioProcessor  : public AudioProcessor
 {
 public:
@@ -57,18 +59,26 @@ public:
     void getStateInformation (MemoryBlock& destData) override;
     void setStateInformation (const void* data, int sizeInBytes) override;
     
-    ThreadPool oscPool;
-    static OSCSender *oscSender;
+    //=======
+    void setPort(int port);
+    int getPort();
+    void setHost(String host);
+    String getHost();
     void setActive(bool);
     void setTrackNum(String trackNum);
+    OSCSender* getOSCSender();
+    
+    ThreadPool oscPool;
 private:
     //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (StreamTrackAudioProcessor)
 
-    int port;
-    String host;
+    static int port;
+    static String host;
     
-    OSCThreadPoolJob oscPoolJob;
+    OSCSender *oscSender;
+    OSCThreadPoolJob *oscPoolJob;
+    
 };
 
 

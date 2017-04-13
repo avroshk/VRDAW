@@ -11,7 +11,9 @@
 #include "PluginProcessor.h"
 #include "PluginEditor.h"
 
-OSCSender *StreamTrackAudioProcessor::oscSender = new OSCSender();
+//OSCSender *StreamTrackAudioProcessor::oscSender = new OSCSender();
+int StreamTrackAudioProcessor::port = 7000;
+String StreamTrackAudioProcessor::host = "127.0.0.1";
 
 //==============================================================================
 StreamTrackAudioProcessor::StreamTrackAudioProcessor()
@@ -23,17 +25,22 @@ StreamTrackAudioProcessor::StreamTrackAudioProcessor()
                       #endif
                        .withOutput ("Output", AudioChannelSet::stereo(), true)
                      #endif
-                       ), oscPool(), oscPoolJob(2,512)
+                       ), oscPool()
 #endif
 {
-    port = 7000;
-    host = "127.0.0.1";
+    //Can I make these static
+    oscSender = new OSCSender();
     oscSender->connect(host, port);
+    oscPoolJob = new OSCThreadPoolJob(2,512,oscSender);
+    
 }
 
 StreamTrackAudioProcessor::~StreamTrackAudioProcessor()
 {
-//    oscSender->disconnect();
+    delete oscPoolJob;
+    oscSender->disconnect();
+    delete oscSender;
+    
 }
 
 //==============================================================================
@@ -148,8 +155,8 @@ void StreamTrackAudioProcessor::processBlock (AudioSampleBuffer& buffer, MidiBuf
 
         // ..do something to the data...
 //    }
-    oscPoolJob.init(buffer, totalNumInputChannels, getBlockSize());
-    oscPool.addJob(&oscPoolJob, false);
+    oscPoolJob->init(buffer, totalNumInputChannels, getBlockSize());
+    oscPool.addJob(oscPoolJob, false);
 }
 
 //==============================================================================
@@ -185,9 +192,29 @@ AudioProcessor* JUCE_CALLTYPE createPluginFilter()
 }
 
 void StreamTrackAudioProcessor::setActive(bool active) {
-    oscPoolJob.bActive = active;
+    oscPoolJob->bActive = active;
 }
 
 void StreamTrackAudioProcessor::setTrackNum(String trackNum) {
-    oscPoolJob.trackNum = trackNum;
+    oscPoolJob->trackNum = trackNum;
+}
+
+void StreamTrackAudioProcessor::setPort(int port) {
+    StreamTrackAudioProcessor::port = port;
+}
+
+int StreamTrackAudioProcessor::getPort() {
+    return StreamTrackAudioProcessor::port;
+}
+
+void StreamTrackAudioProcessor::setHost(String host) {
+    StreamTrackAudioProcessor::host = host;
+}
+
+String StreamTrackAudioProcessor::getHost() {
+    return StreamTrackAudioProcessor::host;
+}
+
+OSCSender* StreamTrackAudioProcessor::getOSCSender() {
+    return oscSender;
 }

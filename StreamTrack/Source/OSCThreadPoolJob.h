@@ -16,7 +16,7 @@
 
 class OSCThreadPoolJob : public ThreadPoolJob {
 public:
-    OSCThreadPoolJob(int,int);
+    OSCThreadPoolJob(int,int, OSCSender*);
     ~OSCThreadPoolJob();
     
     JobStatus runJob() override;
@@ -27,7 +27,8 @@ public:
 
     
 private:
-    
+//    StreamTrackAudioProcessor& processor;
+    OSCSender *oscSender;
     static FFTLight *pFft;
     float ** ppAudio;
 //    float ** ppSpectrum;
@@ -42,8 +43,6 @@ private:
    
     int numChannels;
     int blockSize;
-    
-    
     
     void resetMemoryBlocks();
 };
