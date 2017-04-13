@@ -31,3 +31,4 @@
 #Compiled python sricripts
 *.pyc
 
+StreamTrack/Builds/*

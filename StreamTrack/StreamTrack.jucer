@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<JUCERPROJECT id="L0PWbB" name="StreamTrack" projectType="audioplug" version="1.0.0"
+              bundleIdentifier="com.GTCMT.StreamTrack" includeBinaryInAppConfig="1"
+              buildVST="1" buildVST3="0" buildAU="1" buildAUv3="0" buildRTAS="0"
+              buildAAX="0" pluginName="StreamTrack" pluginDesc="StreamTrack"
+              pluginManufacturer="GTCMT" pluginManufacturerCode="Manu" pluginCode="L0pw"
+              pluginChannelConfigs="" pluginIsSynth="0" pluginWantsMidiIn="0"
+              pluginProducesMidiOut="0" pluginIsMidiEffectPlugin="0" pluginEditorRequiresKeys="0"
+              pluginAUExportPrefix="StreamTrackAU" pluginRTASCategory="" aaxIdentifier="com.yourcompany.StreamTrack"
+              pluginAAXCategory="AAX_ePlugInCategory_Dynamics" jucerVersion="4.3.1"
+              companyName="GTCMT" companyEmail="avroshk@gatech.edu">
+  <MAINGROUP id="pANF62" name="StreamTrack">
+    <GROUP id="{06AEE255-05F6-F2A1-790E-CE6FB3572F15}" name="OSC">
+      <FILE id="b1y10H" name="OSCThreadPoolJob.cpp" compile="1" resource="0"
+            file="Source/OSCThreadPoolJob.cpp"/>
+      <FILE id="lttb4S" name="OSCThreadPoolJob.h" compile="0" resource="0"
+            file="Source/OSCThreadPoolJob.h"/>
+    </GROUP>
+    <GROUP id="{A52AF4EB-1440-9015-53E8-D3AF32516D48}" name="FFT">
+      <FILE id="ILf1bj" name="_kiss_fft_guts.h" compile="0" resource="0"
+            file="../../../Audio Software Eng/SEPlugin/ListenerPlugin/Source/FFT/_kiss_fft_guts.h"/>
+      <FILE id="dDVwag" name="FFTLight.cpp" compile="1" resource="0" file="../../../Audio Software Eng/SEPlugin/ListenerPlugin/Source/FFT/FFTLight.cpp"/>
+      <FILE id="KpI0Gy" name="FFTLight.h" compile="0" resource="0" file="../../../Audio Software Eng/SEPlugin/ListenerPlugin/Source/FFT/FFTLight.h"/>
+      <FILE id="vCDDQr" name="kiss_fft.c" compile="1" resource="0" file="../../../Audio Software Eng/SEPlugin/ListenerPlugin/Source/FFT/kiss_fft.c"/>
+      <FILE id="qq86Rd" name="kiss_fft.h" compile="0" resource="0" file="../../../Audio Software Eng/SEPlugin/ListenerPlugin/Source/FFT/kiss_fft.h"/>
+      <FILE id="RiOAr7" name="kiss_fftr.c" compile="1" resource="0" file="../../../Audio Software Eng/SEPlugin/ListenerPlugin/Source/FFT/kiss_fftr.c"/>
+      <FILE id="OTTZLx" name="kiss_fftr.h" compile="0" resource="0" file="../../../Audio Software Eng/SEPlugin/ListenerPlugin/Source/FFT/kiss_fftr.h"/>
+      <FILE id="HXLCT9" name="kissfft.hh" compile="0" resource="0" file="../../../Audio Software Eng/SEPlugin/ListenerPlugin/Source/FFT/kissfft.hh"/>
+    </GROUP>
+    <GROUP id="{8E525C1F-3C1A-6785-EFF4-13EDF9B1CD7F}" name="Source">
+      <FILE id="EsdBb9" name="PluginProcessor.cpp" compile="1" resource="0"
+            file="Source/PluginProcessor.cpp"/>
+      <FILE id="wEkKXB" name="PluginProcessor.h" compile="0" resource="0"
+            file="Source/PluginProcessor.h"/>
+      <FILE id="EkQy7M" name="PluginEditor.cpp" compile="1" resource="0"
+            file="Source/PluginEditor.cpp"/>
+      <FILE id="ceSyqF" name="PluginEditor.h" compile="0" resource="0" file="Source/PluginEditor.h"/>
+    </GROUP>
+  </MAINGROUP>
+  <EXPORTFORMATS>
+    <XCODE_MAC targetFolder="Builds/MacOSX">
+      <CONFIGURATIONS>
+        <CONFIGURATION name="Debug" isDebug="1" optimisation="1" targetName="StreamTrack"/>
+        <CONFIGURATION name="Release" isDebug="0" optimisation="3" targetName="StreamTrack"/>
+      </CONFIGURATIONS>
+      <MODULEPATHS>
+        <MODULEPATH id="juce_core" path="../../../../JUCE/modules"/>
+        <MODULEPATH id="juce_events" path="../../../../JUCE/modules"/>
+        <MODULEPATH id="juce_graphics" path="../../../../JUCE/modules"/>
+        <MODULEPATH id="juce_data_structures" path="../../../../JUCE/modules"/>
+        <MODULEPATH id="juce_gui_basics" path="../../../../JUCE/modules"/>
+        <MODULEPATH id="juce_gui_extra" path="../../../../JUCE/modules"/>
+        <MODULEPATH id="juce_cryptography" path="../../../../JUCE/modules"/>
+        <MODULEPATH id="juce_opengl" path="../../../../JUCE/modules"/>
+        <MODULEPATH id="juce_audio_basics" path="../../../../JUCE/modules"/>
+        <MODULEPATH id="juce_audio_devices" path="../../../../JUCE/modules"/>
+        <MODULEPATH id="juce_audio_formats" path="../../../../JUCE/modules"/>
+        <MODULEPATH id="juce_audio_processors" path="../../../../JUCE/modules"/>
+        <MODULEPATH id="juce_audio_plugin_client" path="../../../../JUCE/modules"/>
+        <MODULEPATH id="juce_osc" path="../../../../JUCE/modules"/>
+      </MODULEPATHS>
+    </XCODE_MAC>
+  </EXPORTFORMATS>
+  <MODULES>
+    <MODULE id="juce_audio_basics" showAllCode="1" useLocalCopy="1"/>
+    <MODULE id="juce_audio_devices" showAllCode="1" useLocalCopy="1"/>
+    <MODULE id="juce_audio_formats" showAllCode="1" useLocalCopy="1"/>
+    <MODULE id="juce_audio_plugin_client" showAllCode="1" useLocalCopy="1"/>
+    <MODULE id="juce_audio_processors" showAllCode="1" useLocalCopy="1"/>
+    <MODULE id="juce_core" showAllCode="1" useLocalCopy="1"/>
+    <MODULE id="juce_cryptography" showAllCode="1" useLocalCopy="1"/>
+    <MODULE id="juce_data_structures" showAllCode="1" useLocalCopy="1"/>
+    <MODULE id="juce_events" showAllCode="1" useLocalCopy="1"/>
+    <MODULE id="juce_graphics" showAllCode="1" useLocalCopy="1"/>
+    <MODULE id="juce_gui_basics" showAllCode="1" useLocalCopy="1"/>
+    <MODULE id="juce_gui_extra" showAllCode="1" useLocalCopy="1"/>
+    <MODULE id="juce_opengl" showAllCode="1" useLocalCopy="1"/>
+    <MODULE id="juce_osc" showAllCode="1" useLocalCopy="1"/>
+  </MODULES>
+  <JUCEOPTIONS JUCE_QUICKTIME="disabled"/>
+  <LIVE_SETTINGS>
+    <OSX/>
+  </LIVE_SETTINGS>
+</JUCERPROJECT>
