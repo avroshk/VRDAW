@@ -11,7 +11,6 @@
 #include "PluginProcessor.h"
 #include "PluginEditor.h"
 
-//OSCSender *StreamTrackAudioProcessor::oscSender = new OSCSender();
 int StreamTrackAudioProcessor::port = 7000;
 String StreamTrackAudioProcessor::host = "127.0.0.1";
 
@@ -28,19 +27,16 @@ StreamTrackAudioProcessor::StreamTrackAudioProcessor()
                        ), oscPool()
 #endif
 {
-    //Can I make these static
     oscSender = new OSCSender();
     oscSender->connect(host, port);
     oscPoolJob = new OSCThreadPoolJob(2,512,oscSender);
-    
 }
 
 StreamTrackAudioProcessor::~StreamTrackAudioProcessor()
 {
-    delete oscPoolJob;
     oscSender->disconnect();
+    delete oscPoolJob;
     delete oscSender;
-    
 }
 
 //==============================================================================

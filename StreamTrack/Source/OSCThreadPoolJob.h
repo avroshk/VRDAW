@@ -27,13 +27,12 @@ public:
 
     
 private:
-//    StreamTrackAudioProcessor& processor;
+
     OSCSender *oscSender;
     static FFTLight *pFft;
     float ** ppAudio;
-//    float ** ppSpectrum;
-//    uint8 ** ppAudio8bit;
-//    float ** ppSpectrum8bit;
+    char ** ppAudio8bit;
+    char ** ppSpectrum8bit;
     
     int maxNumChannels;
     int maxBlockSize;
@@ -45,6 +44,7 @@ private:
     int blockSize;
     
     void resetMemoryBlocks();
+    void bitCrush(float* audio, char* crushed, int blockSize);
 };
 
 

@@ -18,8 +18,8 @@ OSCThreadPoolJob::OSCThreadPoolJob(int maxNumChannels, int maxBlockSize, OSCSend
     this->maxBlockSize = maxBlockSize;
     this->oscSender = o;
     ppAudio = new float*[maxNumChannels];
-//    ppSpectrum = new float*[maxNumChannels];
-//    ppAudio8bit = new uint8*[maxNumChannels];
+    ppAudio8bit = new char*[maxNumChannels];
+    ppSpectrum8bit = new char*[maxNumChannels];
     
     pFft->init(maxBlockSize);
     bActive = false;
@@ -27,8 +27,8 @@ OSCThreadPoolJob::OSCThreadPoolJob(int maxNumChannels, int maxBlockSize, OSCSend
     
     for (int i=0; i< maxNumChannels;i++) {
         ppAudio[i] = new float[maxBlockSize];
-//        ppSpectrum[i] = new float[pFft->getFFTLength()];
-//        ppAudio8bit[i] = new uint8[maxBlockSize];
+        ppAudio8bit[i] = new char[maxBlockSize];
+        ppSpectrum8bit[i] = new char[pFft->getFFTLength()];
     }
 }
 
@@ -51,16 +51,24 @@ void OSCThreadPoolJob::resetMemoryBlocks() {
     spectrum.reset();
 }
 
+void OSCThreadPoolJob::bitCrush(float* data, char* crushed, int blockSize) {
+    
+    for (int j=0; j< blockSize; j++) {
+        crushed[j] = data[j]*255;
+    }
+    
+}
+
 OSCThreadPoolJob::~OSCThreadPoolJob() {
     resetMemoryBlocks();
     for (int i=0; i<maxNumChannels; i++) {
         delete [] ppAudio[i];
-//        delete [] ppAudio8bit[i];
-//        delete [] ppSpectrum[i];
+        delete [] ppAudio8bit[i];
+        delete [] ppSpectrum8bit[i];
     }
     delete [] ppAudio;
-//    delete [] ppAudio8bit;
-//    delete [] ppSpectrum;
+    delete [] ppAudio8bit;
+    delete [] ppSpectrum8bit;
 }
 
 OSCThreadPoolJob::JobStatus OSCThreadPoolJob::runJob()  {
@@ -78,27 +86,18 @@ OSCThreadPoolJob::JobStatus OSCThreadPoolJob::runJob()  {
         
         for (int i=0; i<numChannels; i++) {
             
-            //bit-crush
-//            for (int j=0; j<blockSize;j++) {
-//                ppAudio8bit[i][j] = (uint8)(ppAudio[i][j]*1000000);
-//            }
-//            
-//            audio.insert(ppAudio8bit[i], blockSize*sizeof(uint8), blockSize*i);
-//            
-//            ppSpectrum[i] = pFft->getSpectrum(ppAudio[i]);
-//            
-//            //bit-crush spectrum
-//            for (int j=0; j<pFft->getFFTLength();j++) {
-//                ppAudio8bit[i][j] = (uint8)(ppSpectrum[i][j]*1000);
-//            }
-//            
-//            spectrum.insert(ppAudio8bit[i], pFft->getFFTLength()*sizeof(uint8), pFft->getFFTLength()*i);
-//            
-            audio.insert(ppAudio[i], blockSize*sizeof(float), blockSize*i);
-            spectrum.insert(pFft->getSpectrum(ppAudio[i]), pFft->getFFTLength()*sizeof(float), pFft->getFFTLength()*i);
+//            bitCrush(ppAudio[i], ppAudio8bit[i], blockSize);
+//            audio.insert(ppAudio8bit[i], blockSize*sizeof(char), blockSize*i);
+            
+            bitCrush(pFft->getSpectrum(ppAudio[i]), ppSpectrum8bit[i], pFft->getFFTLength());
+            spectrum.insert(ppSpectrum8bit[i], pFft->getFFTLength()*sizeof(char), pFft->getFFTLength()*i);
+            
+            
+//            audio.insert(ppAudio[i], blockSize*sizeof(float), blockSize*i);
+//            spectrum.insert(pFft->getSpectrum(ppAudio[i]), pFft->getFFTLength()*sizeof(float), pFft->getFFTLength()*i);
         }
         
-        oscSender->send("/live/track/"+trackNum+"/audio", numChannels, blockSize, audio);
+//        oscSender->send("/live/track/"+trackNum+"/audio", numChannels, blockSize, audio);
         oscSender->send("/live/track/"+trackNum+"/spectrum", numChannels, pFft->getFFTLength(), spectrum);
         resetMemoryBlocks();
     }

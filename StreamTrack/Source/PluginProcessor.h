@@ -68,13 +68,15 @@ public:
     void setTrackNum(String trackNum);
     OSCSender* getOSCSender();
     
-    ThreadPool oscPool;
+    
 private:
     //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (StreamTrackAudioProcessor)
 
     static int port;
     static String host;
+    
+    ThreadPool oscPool;
     
     OSCSender *oscSender;
     OSCThreadPoolJob *oscPoolJob;
