@@ -23,7 +23,7 @@ public:
     void init(AudioSampleBuffer &data, int numChannels, int blockSize);
     
     bool bActive;
-    String trackNum;
+    int trackNum;
 
     
 private:

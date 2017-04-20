@@ -68,7 +68,7 @@ void StreamTrackAudioProcessorEditor::buttonClicked ( Button* button)
     if (btnStart.getButtonText().equalsIgnoreCase("Start")) {
         btnStart.setButtonText("Stop");
         if (txtTrackNumber.getTextValue().toString().isNotEmpty()) {
-            processor.setTrackNum(txtTrackNumber.getTextValue().toString());
+            processor.setTrackNum((txtTrackNumber.getTextValue().toString().getIntValue()));
         }
         processor.setActive(true);
 //        processor.setPort(std::stoi(txtPort.getTextValue().toString()));

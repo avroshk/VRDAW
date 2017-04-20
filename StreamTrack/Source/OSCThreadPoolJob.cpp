@@ -23,7 +23,7 @@ OSCThreadPoolJob::OSCThreadPoolJob(int maxNumChannels, int maxBlockSize, OSCSend
     
     pFft->init(maxBlockSize);
     bActive = false;
-    trackNum = "0";
+    trackNum = 0;
     
     for (int i=0; i< maxNumChannels;i++) {
         ppAudio[i] = new float[maxBlockSize];
@@ -98,7 +98,7 @@ OSCThreadPoolJob::JobStatus OSCThreadPoolJob::runJob()  {
         }
         
 //        oscSender->send("/live/track/"+trackNum+"/audio", numChannels, blockSize, audio);
-        oscSender->send("/live/track/"+trackNum+"/spectrum", numChannels, pFft->getFFTLength(), spectrum);
+        oscSender->send("/live/track/spectrum", trackNum, numChannels, pFft->getFFTLength(), spectrum);
         resetMemoryBlocks();
     }
     

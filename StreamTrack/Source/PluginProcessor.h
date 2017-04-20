@@ -65,7 +65,7 @@ public:
     void setHost(String host);
     String getHost();
     void setActive(bool);
-    void setTrackNum(String trackNum);
+    void setTrackNum(int trackNum);
     OSCSender* getOSCSender();
     
     

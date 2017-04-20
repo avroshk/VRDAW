@@ -191,7 +191,7 @@ void StreamTrackAudioProcessor::setActive(bool active) {
     oscPoolJob->bActive = active;
 }
 
-void StreamTrackAudioProcessor::setTrackNum(String trackNum) {
+void StreamTrackAudioProcessor::setTrackNum(int trackNum) {
     oscPoolJob->trackNum = trackNum;
 }
 
