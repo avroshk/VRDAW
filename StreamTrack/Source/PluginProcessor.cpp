@@ -29,7 +29,12 @@ StreamTrackAudioProcessor::StreamTrackAudioProcessor()
 {
     oscSender = new OSCSender();
     oscSender->connect(host, port);
-    oscPoolJob = new OSCThreadPoolJob(2,512,oscSender);
+    hostBufferSize = 512;
+    windowSize = 8192;
+    processBufferSize = 0;
+    maxChannelsSupported = 2;
+    oscPoolJob = new OSCThreadPoolJob(2,windowSize,oscSender);
+    
 }
 
 StreamTrackAudioProcessor::~StreamTrackAudioProcessor()
@@ -97,12 +102,22 @@ void StreamTrackAudioProcessor::prepareToPlay (double sampleRate, int samplesPer
 {
     // Use this method as the place to do any pre-playback
     // initialisation that you need..
+    pfWindow = new float*[maxChannelsSupported];
+    for (int i=0; i< maxChannelsSupported;i++) {
+        pfWindow[i] = new float[windowSize];
+    }
 }
 
 void StreamTrackAudioProcessor::releaseResources()
 {
     // When playback stops, you can use this as an opportunity to free up any
     // spare memory, etc.
+    
+    for (int i=0; i<maxChannelsSupported; i++) {
+        delete [] pfWindow[i];
+        
+    }
+    delete [] pfWindow;
 }
 
 #ifndef JucePlugin_PreferredChannelConfigurations
@@ -145,14 +160,16 @@ void StreamTrackAudioProcessor::processBlock (AudioSampleBuffer& buffer, MidiBuf
 
     // This is the place where you'd normally do the guts of your plugin's
     // audio processing...
-//    for (int channel = 0; channel < totalNumInputChannels; ++channel)
-//    {
-//        float* channelData = buffer.getWritePointer (channel);
-
-        // ..do something to the data...
-//    }
-    oscPoolJob->init(buffer, totalNumInputChannels, getBlockSize());
-    oscPool.addJob(oscPoolJob, false);
+    if (processBufferSize > 0 && (processBufferSize % windowSize == 0)) {
+        oscPoolJob->init(pfWindow, totalNumInputChannels, windowSize);
+        oscPool.addJob(oscPoolJob, false);
+        processBufferSize = 0;
+    } else {
+        for (int channel = 0; channel < totalNumInputChannels; ++channel) {
+            memcpy(pfWindow[channel]+processBufferSize, buffer.getWritePointer (channel),sizeof(float)*getBlockSize());
+        }
+        processBufferSize += getBlockSize();
+    }
 }
 
 //==============================================================================

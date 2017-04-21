@@ -75,6 +75,12 @@ private:
 
     static int port;
     static String host;
+    int hostBufferSize;
+    int windowSize;
+    int processBufferSize;
+    int maxChannelsSupported;
+    float **pfWindow;
+    
     
     ThreadPool oscPool;
     

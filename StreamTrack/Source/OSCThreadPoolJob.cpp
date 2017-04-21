@@ -32,14 +32,28 @@ OSCThreadPoolJob::OSCThreadPoolJob(int maxNumChannels, int maxBlockSize, OSCSend
     }
 }
 
-void OSCThreadPoolJob::init(AudioSampleBuffer &data, int numChannels, int blockSize) {
+//void OSCThreadPoolJob::init(AudioSampleBuffer &data, int numChannels, int blockSize) {
+//    this->numChannels = numChannels;
+//    this->blockSize = blockSize;
+//    if (bActive) {
+//        if (numChannels <= maxNumChannels) {
+//            for (int i=0; i< maxNumChannels;i++) {
+//                if (blockSize <= maxBlockSize) {
+//                    memcpy(ppAudio[i], data.getWritePointer(i),sizeof(float)*blockSize);
+//                }
+//            }
+//        }
+//    }
+//}
+
+void OSCThreadPoolJob::init(float ** data, int numChannels, int blockSize) {
     this->numChannels = numChannels;
     this->blockSize = blockSize;
     if (bActive) {
         if (numChannels <= maxNumChannels) {
             for (int i=0; i< maxNumChannels;i++) {
                 if (blockSize <= maxBlockSize) {
-                    memcpy(ppAudio[i], data.getWritePointer(i),sizeof(float)*blockSize);
+                    memcpy(ppAudio[i], data[i],sizeof(float)*blockSize);
                 }
             }
         }

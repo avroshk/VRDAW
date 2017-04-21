@@ -20,7 +20,7 @@ public:
     ~OSCThreadPoolJob();
     
     JobStatus runJob() override;
-    void init(AudioSampleBuffer &data, int numChannels, int blockSize);
+    void init(float **data, int numChannels, int blockSize);
     
     bool bActive;
     int trackNum;
