@@ -33,13 +33,19 @@ public:
     void buttonClicked (Button *button) override;
 
 private:
+    class ParameterSlider;
+//    ScopedPointer<ParameterSlider> trackNumberSlider;
+//    ScopedPointer<ParameterSlider> portNumberSlider;
+    
+    
     // This reference is provided as a quick way for your editor to
     // access the processor object that created it.
     StreamTrackAudioProcessor& processor;
+//    
+//    TextButton btnStart;
+//    TextEditor txtTrackNumber, txtPort, txtHost;
+//    ToggleButton btnSendOnlySpectrum;
     
-    TextButton btnStart;
-    TextEditor txtTrackNumber, txtPort, txtHost;
-    ToggleButton btnSendOnlySpectrum;
     
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (StreamTrackAudioProcessorEditor)
 };

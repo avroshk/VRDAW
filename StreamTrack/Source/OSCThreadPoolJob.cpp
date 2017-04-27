@@ -11,8 +11,6 @@
 #include "OSCThreadPoolJob.h"
 #include "PluginProcessor.h"
 
-FFTLight *OSCThreadPoolJob::pFft = new FFTLight();
-
 OSCThreadPoolJob::OSCThreadPoolJob(int maxNumChannels, int maxBlockSize, OSCSender* o): ThreadPoolJob("OSC ThreadPool JOB") {
     this->maxNumChannels = maxNumChannels;
     this->maxBlockSize = maxBlockSize;
@@ -20,9 +18,9 @@ OSCThreadPoolJob::OSCThreadPoolJob(int maxNumChannels, int maxBlockSize, OSCSend
     ppAudio = new float*[maxNumChannels];
     ppAudio8bit = new char*[maxNumChannels];
     ppSpectrum8bit = new char*[maxNumChannels];
-    
+    pFft = new FFTLight();
     pFft->init(maxBlockSize);
-    bActive = false;
+    bActive = true;
     trackNum = 0;
     
     for (int i=0; i< maxNumChannels;i++) {
@@ -30,25 +28,13 @@ OSCThreadPoolJob::OSCThreadPoolJob(int maxNumChannels, int maxBlockSize, OSCSend
         ppAudio8bit[i] = new char[maxBlockSize];
         ppSpectrum8bit[i] = new char[pFft->getFFTLength()];
     }
+    
 }
 
-//void OSCThreadPoolJob::init(AudioSampleBuffer &data, int numChannels, int blockSize) {
-//    this->numChannels = numChannels;
-//    this->blockSize = blockSize;
-//    if (bActive) {
-//        if (numChannels <= maxNumChannels) {
-//            for (int i=0; i< maxNumChannels;i++) {
-//                if (blockSize <= maxBlockSize) {
-//                    memcpy(ppAudio[i], data.getWritePointer(i),sizeof(float)*blockSize);
-//                }
-//            }
-//        }
-//    }
-//}
-
-void OSCThreadPoolJob::init(float ** data, int numChannels, int blockSize) {
+void OSCThreadPoolJob::init(float ** data, int numChannels, int blockSize, int trackNum) {
     this->numChannels = numChannels;
     this->blockSize = blockSize;
+    this->trackNum = trackNum;
     if (bActive) {
         if (numChannels <= maxNumChannels) {
             for (int i=0; i< maxNumChannels;i++) {
@@ -102,16 +88,13 @@ OSCThreadPoolJob::JobStatus OSCThreadPoolJob::runJob()  {
             
 //            bitCrush(ppAudio[i], ppAudio8bit[i], blockSize);
 //            audio.insert(ppAudio8bit[i], blockSize*sizeof(char), blockSize*i);
-            
+        
             bitCrush(pFft->getSpectrum(ppAudio[i]), ppSpectrum8bit[i], pFft->getFFTLength());
             spectrum.insert(ppSpectrum8bit[i], pFft->getFFTLength()*sizeof(char), pFft->getFFTLength()*i);
             
-            
-//            audio.insert(ppAudio[i], blockSize*sizeof(float), blockSize*i);
-//            spectrum.insert(pFft->getSpectrum(ppAudio[i]), pFft->getFFTLength()*sizeof(float), pFft->getFFTLength()*i);
         }
         
-//        oscSender->send("/live/track/"+trackNum+"/audio", numChannels, blockSize, audio);
+//        oscSender->send("/live/track/audio", trackNum, numChannels, blockSize, audio);
         oscSender->send("/live/track/spectrum", trackNum, numChannels, pFft->getFFTLength(), spectrum);
         resetMemoryBlocks();
     }

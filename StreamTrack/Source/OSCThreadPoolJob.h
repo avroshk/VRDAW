@@ -20,16 +20,15 @@ public:
     ~OSCThreadPoolJob();
     
     JobStatus runJob() override;
-    void init(float **data, int numChannels, int blockSize);
+    void init(float **data, int numChannels, int blockSize, int trackNum);
     
     bool bActive;
     int trackNum;
-
     
 private:
 
     OSCSender *oscSender;
-    static FFTLight *pFft;
+    FFTLight *pFft;
     float ** ppAudio;
     char ** ppAudio8bit;
     char ** ppSpectrum8bit;

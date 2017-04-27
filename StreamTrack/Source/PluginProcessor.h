@@ -60,6 +60,8 @@ public:
     void setStateInformation (const void* data, int sizeInBytes) override;
     
     //=======
+    void initPlugin();
+    void resetPlugin();
     void setPort(int port);
     int getPort();
     void setHost(String host);
@@ -68,19 +70,30 @@ public:
     void setTrackNum(int trackNum);
     OSCSender* getOSCSender();
     
+    AudioParameterInt* trackNumParam;
+    AudioParameterInt* portParam;
+    AudioParameterInt* ip1Param;
+    AudioParameterInt* ip2Param;
+    AudioParameterInt* ip3Param;
+    AudioParameterInt* ip4Param;
+    AudioParameterInt* blockMulParam;
+    AudioParameterInt* hopMulParam;
+    
     
 private:
     //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (StreamTrackAudioProcessor)
 
-    static int port;
-    static String host;
+    int port, ip1, ip2, ip3, ip4, blockMul, hopMul;
+    int currentHop;
+    String host;
     int hostBufferSize;
     int windowSize;
     int processBufferSize;
     int maxChannelsSupported;
     float **pfWindow;
     
+    bool bActive;
     
     ThreadPool oscPool;
     
